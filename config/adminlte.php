@@ -38,6 +38,12 @@ return [
             'can'  => 'admin',
         ],
         [
+            'text' => 'Sesi Aktif',
+            'route' => 'sessions.index',
+            'icon' => 'fas fa-fw fa-user-check',
+            'can'  => 'admin',
+        ],
+        [
             'text' => 'Menu Produk',
             'url'  => 'produk',
             'icon' => 'fas fa-fw fa-coffee',
@@ -54,6 +60,12 @@ return [
             'text' => 'Riwayat Transaksi',
             'url'  => 'riwayat-transaksi',
             'icon' => 'fas fa-fw fa-history',
+            'can'  => ['admin', 'kasir'],
+        ],
+        [
+            'text' => 'Laporan Bulanan',
+            'url'  => 'laporan-transaksi',
+            'icon' => 'fas fa-fw fa-chart-line',
             'can'  => ['admin', 'kasir'],
         ],
         ['header' => 'AKUN'],

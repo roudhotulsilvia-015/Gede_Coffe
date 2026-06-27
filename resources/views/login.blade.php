@@ -23,6 +23,9 @@
                 <input type="password" name="password" class="form-control" placeholder="Password" required>
             </div>
             <button type="submit" class="btn btn-primary w-100">Sign In</button>
+            <div class="text-center mt-3">
+                <small>Belum punya akun? <a href="{{ route('register') }}">Daftar di sini</a></small>
+            </div>
         </form>
     </div>
 </body>

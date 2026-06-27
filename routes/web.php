@@ -6,6 +6,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\KasirController;
+use App\Http\Controllers\SessionController;
 use App\Http\Controllers\TransaksiController;
 use App\Models\Karyawan;
 use App\Models\Produk;
@@ -16,9 +17,13 @@ Route::get('/', function () {
     return redirect('/login');
 });
 
-// 2. Route untuk Proses Login
-Route::get('/login', [LoginController::class, 'showLogin'])->name('login');
-Route::post('/login', [LoginController::class, 'login']);
+// 2. Route untuk Proses Login dan Register
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [LoginController::class, 'showLogin'])->name('login');
+    Route::post('/login', [LoginController::class, 'login']);
+    Route::get('/register', [LoginController::class, 'showRegister'])->name('register');
+    Route::post('/register', [LoginController::class, 'register']);
+});
 
 // 3. Route khusus untuk user yang sudah Login
 Route::middleware('auth')->group(function () {
@@ -45,6 +50,8 @@ Route::middleware('auth')->group(function () {
         Route::resource('karyawan', KaryawanController::class);
         Route::resource('produk', ProdukController::class);
         Route::resource('users', App\Http\Controllers\UserController::class);
+        Route::get('/sessions', [SessionController::class, 'index'])->name('sessions.index');
+        Route::delete('/sessions/{id}', [SessionController::class, 'destroy'])->name('sessions.destroy');
     });
 
     // Kasir dan Admin: akses kasir dan riwayat transaksi
@@ -52,8 +59,16 @@ Route::middleware('auth')->group(function () {
         Route::get('/kasir', [KasirController::class, 'index'])->name('kasir.index');
         Route::post('/kasir/checkout', [KasirController::class, 'checkout'])->name('kasir.checkout');
         Route::get('/riwayat-transaksi', [TransaksiController::class, 'index'])->name('transaksi.riwayat');
+        Route::get('/laporan-transaksi', [TransaksiController::class, 'report'])->name('transaksi.report');
         Route::get('/transaksi/export/pdf', [TransaksiController::class, 'exportPdf'])->name('transaksi.export.pdf');
         Route::get('/transaksi/export/excel', [TransaksiController::class, 'exportExcel'])->name('transaksi.export.excel');
         Route::get('/transaksi/{id}', [TransaksiController::class, 'show'])->name('transaksi.show')->whereNumber('id');
+    });
+
+    // Hanya Admin: edit dan hapus transaksi
+    Route::middleware('role:admin')->group(function () {
+        Route::get('/transaksi/{id}/edit', [TransaksiController::class, 'edit'])->name('transaksi.edit')->whereNumber('id');
+        Route::put('/transaksi/{id}', [TransaksiController::class, 'update'])->name('transaksi.update')->whereNumber('id');
+        Route::delete('/transaksi/{id}', [TransaksiController::class, 'destroy'])->name('transaksi.destroy')->whereNumber('id');
     });
 });

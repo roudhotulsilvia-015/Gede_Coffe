@@ -7,11 +7,12 @@
             <h5 class="text-secondary mt-3">{{ $kategori }}</h5>
             <div class="row">
                 @foreach($items as $p)
-                <div class="col-md-4">
+                <div class="col-md-4" id="product_{{ $p->id }}">
                     <div class="card shadow-sm">
-                        <div class="card-body text-center">
+                        <div class="card-body text-center" data-stock="{{ $p->stok }}">
                             <h6>{{ $p->nama_produk }}</h6>
                             <p class="text-bold text-primary">Rp {{ number_format($p->harga) }}</p>
+                            <p class="text-muted mb-2">Stok: {{ $p->stok }}</p>
                             <input type="number" id="qty_{{$p->id}}" value="1" min="1" class="form-control mb-2">
                             <button class="btn btn-sm btn-success btn-block" onclick="addToCart('{{ $p->id }}', '{{ $p->nama_produk }}', {{ $p->harga }})">
                                 <i class="fas fa-cart-plus"></i> Tambah
@@ -54,17 +55,39 @@
     let cart = [];
 
     function addToCart(id, nama, harga) {
-        let qty = parseInt(document.getElementById('qty_' + id).value);
+        let qtyInput = document.getElementById('qty_' + id);
+        let qty = parseInt(qtyInput.value);
         if (qty < 1) {
             alert('Jumlah harus minimal 1');
             return;
         }
 
-        let subtotal = harga * qty;
-        cart.push({id: id, nama: nama, harga: harga, qty: qty, subtotal: subtotal});
+        let productCard = document.querySelector('#product_' + id + ' .card-body');
+        let stock = productCard ? parseInt(productCard.dataset.stock || 0) : 0;
+        if (qty > stock) {
+            alert('Jumlah melebihi stok tersedia. Stok saat ini: ' + stock);
+            return;
+        }
 
-        let tbody = document.querySelector('#cartTable tbody');
-        tbody.innerHTML += `<tr><td>${nama}</td><td>${qty}</td><td>${subtotal.toLocaleString()}</td></tr>`;
+        let subtotal = harga * qty;
+        let cartItem = cart.find(item => item.id === id);
+
+        if (cartItem) {
+            cartItem.qty += qty;
+            cartItem.subtotal += subtotal;
+            let row = document.querySelector('#cart-row-' + id);
+            if (row) {
+                let qtyInput = row.querySelector('.cart-qty-input');
+                if (qtyInput) {
+                    qtyInput.value = cartItem.qty;
+                }
+                row.querySelector('.cart-subtotal').innerText = cartItem.subtotal.toLocaleString();
+            }
+        } else {
+            cart.push({id: id, nama: nama, harga: harga, qty: qty, subtotal: subtotal});
+            let tbody = document.querySelector('#cartTable tbody');
+            tbody.innerHTML += `<tr id="cart-row-${id}"><td>${nama}</td><td><input type="number" min="1" class="form-control form-control-sm cart-qty-input" value="${qty}" onchange="updateCartQty('${id}', this.value)"></td><td class="cart-subtotal">${subtotal.toLocaleString()}</td></tr>`;
+        }
 
         updateTotal();
     }
@@ -72,6 +95,36 @@
     function updateTotal() {
         let total = cart.reduce((sum, item) => sum + item.subtotal, 0);
         document.getElementById('totalHarga').innerText = total.toLocaleString();
+    }
+
+    function updateCartQty(id, value) {
+        let qty = parseInt(value);
+        if (qty < 1) {
+            qty = 1;
+        }
+
+        let cartItem = cart.find(item => item.id === id);
+        if (!cartItem) {
+            return;
+        }
+
+        let productCard = document.querySelector('#product_' + id + ' .card-body');
+        let stock = productCard ? parseInt(productCard.dataset.stock || 0) : 0;
+        if (qty > stock) {
+            alert('Jumlah melebihi stok tersedia. Stok saat ini: ' + stock);
+            qty = stock;
+        }
+
+        cartItem.qty = qty;
+        cartItem.subtotal = cartItem.harga * qty;
+
+        let row = document.querySelector('#cart-row-' + id);
+        if (row) {
+            row.querySelector('.cart-qty-input').value = qty;
+            row.querySelector('.cart-subtotal').innerText = cartItem.subtotal.toLocaleString();
+        }
+
+        updateTotal();
     }
 
     async function updateKembalian() {
@@ -118,14 +171,33 @@
 
             printReceipt(result, total, bayar);
 
+            if (result.out_of_stock_names && result.out_of_stock_names.length > 0) {
+                alert('Produk berikut habis dan tidak lagi tersedia: ' + result.out_of_stock_names.join(', '));
+            }
+
             cart = [];
             document.querySelector('#cartTable tbody').innerHTML = '';
             document.getElementById('totalHarga').innerText = '0';
             document.getElementById('bayar').value = '';
             document.getElementById('kembalian').value = 'Rp 0';
+
+            removeSoldOutProducts(result.out_of_stock_ids || []);
         } catch (error) {
             alert('Error: ' + error.message);
         }
+    }
+
+    function removeSoldOutProducts(outOfStockIds) {
+        if (!outOfStockIds.length) {
+            return;
+        }
+
+        outOfStockIds.forEach(id => {
+            let row = document.querySelector('#product_' + id);
+            if (row) {
+                row.remove();
+            }
+        });
     }
 
     function printReceipt(result, total, bayar) {

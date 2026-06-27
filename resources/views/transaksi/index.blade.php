@@ -36,6 +36,14 @@
                     <td>{{ $t->created_at->format('d M Y, H:i') }}</td>
                     <td>
                         <a href="{{ route('transaksi.show', $t->id) }}" class="btn btn-sm btn-primary">Detail</a>
+                        @if(auth()->user()->role === 'admin')
+                        <a href="{{ route('transaksi.edit', $t->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                        <form action="{{ route('transaksi.destroy', $t->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus transaksi ini?');">
+                            @csrf
+                            @method('DELETE')
+                            <button class="btn btn-sm btn-danger">Hapus</button>
+                        </form>
+                        @endif
                     </td>
                 </tr>
                 @empty

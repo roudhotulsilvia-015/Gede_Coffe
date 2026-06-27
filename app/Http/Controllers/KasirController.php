@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 class KasirController extends Controller {
     
     public function index() {
-        $produks = Produk::all()->groupBy('kategori');
+        $produks = Produk::where('stok', '>', 0)->get()->groupBy('kategori');
         return view('kasir.index', compact('produks'));
     }
 
@@ -35,10 +35,18 @@ class KasirController extends Controller {
                 'user_id' => Auth::id(),
             ]);
 
+            $outOfStockIds = [];
+            $outOfStockNames = [];
+
             foreach ($data['keranjang'] as $item) {
                 $produk = Produk::find($item['id']);
                 if (! $produk || $produk->stok < $item['qty']) {
                     return response()->json(['error' => 'Stok produk tidak mencukupi atau produk tidak ditemukan.'], 422);
+                }
+
+                if ($produk->stok === $item['qty']) {
+                    $outOfStockIds[] = $produk->id;
+                    $outOfStockNames[] = $produk->nama_produk;
                 }
 
                 DetailTransaksi::create([
@@ -55,6 +63,8 @@ class KasirController extends Controller {
                 'message' => 'Transaksi Sukses!',
                 'kode_transaksi' => $kodeTransaksi,
                 'kasir' => Auth::user() ? Auth::user()->name : 'Kasir',
+                'out_of_stock_ids' => $outOfStockIds,
+                'out_of_stock_names' => $outOfStockNames,
             ]);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
