@@ -16,17 +16,31 @@ class KasirController extends Controller {
     }
 
     public function checkout(Request $request) {
+        $data = $request->validate([
+            'total_harga' => 'required|numeric|min:0',
+            'bayar' => 'required|numeric|min:0',
+            'keranjang' => 'required|array|min:1',
+            'keranjang.*.id' => 'required|integer|exists:produks,id',
+            'keranjang.*.qty' => 'required|integer|min:1',
+            'keranjang.*.subtotal' => 'required|numeric|min:0',
+        ]);
+
         try {
             $kodeTransaksi = 'TRX-' . time();
             $transaksi = Transaksi::create([
                 'kode_transaksi' => $kodeTransaksi,
-                'total_harga' => $request->total_harga,
-                'bayar' => $request->bayar,
-                'kembalian' => $request->bayar - $request->total_harga,
+                'total_harga' => $data['total_harga'],
+                'bayar' => $data['bayar'],
+                'kembalian' => $data['bayar'] - $data['total_harga'],
                 'user_id' => Auth::id(),
             ]);
 
-            foreach ($request->keranjang as $item) {
+            foreach ($data['keranjang'] as $item) {
+                $produk = Produk::find($item['id']);
+                if (! $produk || $produk->stok < $item['qty']) {
+                    return response()->json(['error' => 'Stok produk tidak mencukupi atau produk tidak ditemukan.'], 422);
+                }
+
                 DetailTransaksi::create([
                     'transaksi_id' => $transaksi->id,
                     'produk_id' => $item['id'],
@@ -34,10 +48,7 @@ class KasirController extends Controller {
                     'subtotal' => $item['subtotal']
                 ]);
 
-                $produk = Produk::find($item['id']);
-                if ($produk) {
-                    $produk->decrement('stok', $item['qty']);
-                }
+                $produk->decrement('stok', $item['qty']);
             }
 
             return response()->json([

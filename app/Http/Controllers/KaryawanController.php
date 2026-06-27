@@ -16,6 +16,10 @@ class KaryawanController extends Controller
         return view('karyawan.create');
     }
 
+    public function show(Karyawan $karyawan) {
+        return view('karyawan.show', compact('karyawan'));
+    }
+
     public function store(Request $request) {
         $validated = $request->validate([
             'nama' => 'required',

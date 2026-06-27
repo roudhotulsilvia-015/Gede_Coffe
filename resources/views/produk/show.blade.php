@@ -1,0 +1,20 @@
+@extends('adminlte::page')
+
+@section('title', 'Detail Produk')
+
+@section('content')
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Detail Produk</h3>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered">
+            <tr><th>Nama Produk</th><td>{{ $produk->nama_produk }}</td></tr>
+            <tr><th>Kategori</th><td>{{ $produk->kategori }}</td></tr>
+            <tr><th>Harga</th><td>Rp {{ number_format($produk->harga) }}</td></tr>
+            <tr><th>Stok</th><td>{{ $produk->stok }}</td></tr>
+        </table>
+        <a href="{{ route('produk.index') }}" class="btn btn-secondary">Kembali</a>
+    </div>
+</div>
+@stop

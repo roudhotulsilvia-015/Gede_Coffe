@@ -6,12 +6,22 @@
 </head>
 <body class="bg-light">
     <div class="container d-flex justify-content-center align-items-center vh-100">
-        <form action="/login" method="POST" class="card p-4 shadow" style="width: 350px;">
+        <form action="{{ route('login') }}" method="POST" class="card p-4 shadow" style="width: 350px;">
             @csrf
             <h3 class="text-center">GedeCoffee</h3>
+            @if(session('error'))
+                <div class="alert alert-danger">{{ session('error') }}</div>
+            @endif
             @error('username') <div class="alert alert-danger">{{ $message }}</div> @enderror
-            <input type="text" name="username" class="form-control mb-3" placeholder="Username" required>
-            <input type="password" name="password" class="form-control mb-3" placeholder="Password" required>
+            @error('password') <div class="alert alert-danger">{{ $message }}</div> @enderror
+            <div class="mb-3">
+                <label class="form-label">Username</label>
+                <input type="text" name="username" class="form-control" placeholder="Username" value="{{ old('username') }}" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input type="password" name="password" class="form-control" placeholder="Password" required>
+            </div>
             <button type="submit" class="btn btn-primary w-100">Sign In</button>
         </form>
     </div>

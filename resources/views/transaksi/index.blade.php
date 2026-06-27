@@ -10,26 +10,39 @@
         </div>
     </div>
     <div class="card-body">
+        @if(session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
         <table class="table table-bordered table-striped" id="tabelTransaksi">
             <thead>
                 <tr>
                     <th>Kode Transaksi</th>
+                    <th>Kasir</th>
                     <th>Total Harga</th>
                     <th>Bayar</th>
                     <th>Kembalian</th>
                     <th>Waktu</th>
+                    <th>Aksi</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($transaksis as $t)
+                @forelse($transaksis as $t)
                 <tr>
                     <td>{{ $t->kode_transaksi }}</td>
+                    <td>{{ optional($t->user)->name ?? '-' }}</td>
                     <td>Rp {{ number_format($t->total_harga) }}</td>
                     <td>Rp {{ number_format($t->bayar) }}</td>
                     <td>Rp {{ number_format($t->kembalian) }}</td>
                     <td>{{ $t->created_at->format('d M Y, H:i') }}</td>
+                    <td>
+                        <a href="{{ route('transaksi.show', $t->id) }}" class="btn btn-sm btn-primary">Detail</a>
+                    </td>
                 </tr>
-                @endforeach
+                @empty
+                <tr>
+                    <td colspan="7" class="text-center">Belum ada transaksi untuk ditampilkan.</td>
+                </tr>
+                @endforelse
             </tbody>
         </table>
     </div>

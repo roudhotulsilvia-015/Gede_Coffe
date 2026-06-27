@@ -29,22 +29,32 @@ return [
             'text' => 'Data Karyawan',
             'url'  => 'karyawan',
             'icon' => 'fas fa-fw fa-users',
+            'can'  => 'admin',
+        ],
+        [
+            'text' => 'Manajemen User',
+            'url'  => 'users',
+            'icon' => 'fas fa-fw fa-user-cog',
+            'can'  => 'admin',
         ],
         [
             'text' => 'Menu Produk',
             'url'  => 'produk',
             'icon' => 'fas fa-fw fa-coffee',
+            'can'  => 'admin',
         ],
         ['header' => 'TRANSAKSI'],
         [
             'text' => 'Kasir',
             'url'  => 'kasir',
             'icon' => 'fas fa-cash-register',
+            'can'  => ['admin', 'kasir'],
         ],
         [
             'text' => 'Riwayat Transaksi',
             'url'  => 'riwayat-transaksi',
             'icon' => 'fas fa-fw fa-history',
+            'can'  => ['admin', 'kasir'],
         ],
         ['header' => 'AKUN'],
         [

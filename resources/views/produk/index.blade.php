@@ -11,6 +11,9 @@
         <div class="card-tools"><a href="{{ route('produk.create') }}" class="btn btn-primary btn-sm">Tambah</a></div>
     </div>
     <div class="card-body">
+        @if(session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
         <table class="table table-bordered table-striped" id="tabelProduk">
             <thead>
                 <tr>
@@ -29,6 +32,7 @@
                     <td>Rp {{ number_format($p->harga) }}</td>
                     <td>{{ $p->stok }}</td>
                     <td>
+                        <a href="{{ route('produk.show', $p->id) }}" class="btn btn-info btn-sm">Detail</a>
                         <a href="{{ route('produk.edit', $p->id) }}" class="btn btn-warning btn-sm">Edit</a>
                         <form action="{{ route('produk.destroy', $p->id) }}" method="POST" style="display:inline;">
                             @csrf @method('DELETE')

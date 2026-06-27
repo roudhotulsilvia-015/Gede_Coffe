@@ -7,7 +7,14 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class TransaksiController extends Controller {
     public function index() {
-        $transaksis = Transaksi::latest()->get();
+        $user = auth()->user();
+        $query = Transaksi::with('user')->latest();
+
+        if ($user->role === 'kasir') {
+            $query->where('user_id', $user->id);
+        }
+
+        $transaksis = $query->get();
         return view('transaksi.index', compact('transaksis'));
     }
 
@@ -17,26 +24,41 @@ class TransaksiController extends Controller {
     }
 
     public function exportPdf() {
-        $transaksis = Transaksi::latest()->get();
+        $user = auth()->user();
+        $query = Transaksi::with('user')->latest();
+
+        if ($user->role === 'kasir') {
+            $query->where('user_id', $user->id);
+        }
+
+        $transaksis = $query->get();
         $pdf = Pdf::loadView('transaksi.export_pdf', compact('transaksis'));
         return $pdf->download('laporan-transaksi.pdf');
     }
 
     public function exportExcel() {
-        $transaksis = Transaksi::latest()->get();
+        $user = auth()->user();
+        $query = Transaksi::with('user')->latest();
+
+        if ($user->role === 'kasir') {
+            $query->where('user_id', $user->id);
+        }
+
+        $transaksis = $query->get();
 
         $headers = [
             'Content-Type' => 'text/csv',
             'Content-Disposition' => 'attachment; filename="laporan-transaksi.csv"',
         ];
 
-        $columns = ['Kode Transaksi', 'Total Harga', 'Bayar', 'Kembalian', 'Waktu'];
+        $columns = ['Kode Transaksi', 'Kasir', 'Total Harga', 'Bayar', 'Kembalian', 'Waktu'];
         $callback = function() use ($transaksis, $columns) {
             $file = fopen('php://output', 'w');
             fputcsv($file, $columns);
             foreach ($transaksis as $t) {
                 fputcsv($file, [
                     $t->kode_transaksi,
+                    optional($t->user)->name ?? '-',
                     $t->total_harga,
                     $t->bayar,
                     $t->kembalian,

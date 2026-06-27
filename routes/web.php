@@ -1,11 +1,15 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\KasirController;
 use App\Http\Controllers\TransaksiController;
+use App\Models\Karyawan;
+use App\Models\Produk;
+use App\Models\Transaksi;
 
 // 1. Halaman utama diarahkan ke login
 Route::get('/', function () {
@@ -20,7 +24,17 @@ Route::post('/login', [LoginController::class, 'login']);
 Route::middleware('auth')->group(function () {
     
     Route::get('/dashboard', function () {
-        return view('home'); 
+        $user = Auth::user();
+
+        $stats = [
+            'total_karyawan' => $user->role === 'admin' ? Karyawan::count() : null,
+            'total_produk' => $user->role === 'admin' ? Produk::count() : null,
+            'total_transaksi' => $user->role === 'admin'
+                ? Transaksi::count()
+                : Transaksi::where('user_id', $user->id)->count(),
+        ];
+
+        return view('home', compact('user', 'stats'));
     })->name('dashboard');
 
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
@@ -30,6 +44,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:admin')->group(function () {
         Route::resource('karyawan', KaryawanController::class);
         Route::resource('produk', ProdukController::class);
+        Route::resource('users', App\Http\Controllers\UserController::class);
     });
 
     // Kasir dan Admin: akses kasir dan riwayat transaksi
@@ -39,5 +54,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/riwayat-transaksi', [TransaksiController::class, 'index'])->name('transaksi.riwayat');
         Route::get('/transaksi/export/pdf', [TransaksiController::class, 'exportPdf'])->name('transaksi.export.pdf');
         Route::get('/transaksi/export/excel', [TransaksiController::class, 'exportExcel'])->name('transaksi.export.excel');
+        Route::get('/transaksi/{id}', [TransaksiController::class, 'show'])->name('transaksi.show')->whereNumber('id');
     });
 });

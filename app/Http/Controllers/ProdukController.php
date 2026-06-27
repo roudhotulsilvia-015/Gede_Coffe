@@ -16,6 +16,10 @@ class ProdukController extends Controller
         return view('produk.create');
     }
 
+    public function show(Produk $produk) {
+        return view('produk.show', compact('produk'));
+    }
+
     public function store(Request $request) {
         $data = $request->validate([
             'nama_produk' => 'required',

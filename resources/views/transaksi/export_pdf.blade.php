@@ -18,6 +18,7 @@
         <thead>
             <tr>
                 <th>Kode Transaksi</th>
+                <th>Kasir</th>
                 <th>Total Harga</th>
                 <th>Bayar</th>
                 <th>Kembalian</th>
@@ -28,6 +29,7 @@
             @foreach($transaksis as $t)
             <tr>
                 <td>{{ $t->kode_transaksi }}</td>
+                <td>{{ optional($t->user)->name ?? '-' }}</td>
                 <td class="text-right">Rp {{ number_format($t->total_harga) }}</td>
                 <td class="text-right">Rp {{ number_format($t->bayar) }}</td>
                 <td class="text-right">Rp {{ number_format($t->kembalian) }}</td>

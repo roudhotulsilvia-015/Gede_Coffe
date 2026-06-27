@@ -9,6 +9,9 @@
         </div>
     </div>
     <div class="card-body">
+        @if(session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
         <table class="table table-bordered table-striped" id="tabelKaryawan">
             <thead>
                 <tr>
@@ -27,6 +30,7 @@
                     <td>{{ $k->jabatan }}</td>
                     <td>{{ $k->telepon }}</td>
                     <td>
+                        <a href="{{ route('karyawan.show', $k->id) }}" class="btn btn-info btn-sm">Detail</a>
                         <a href="{{ route('karyawan.edit', $k->id) }}" class="btn btn-warning btn-sm">Edit</a>
                         <form action="{{ route('karyawan.destroy', $k->id) }}" method="POST" style="display:inline;">
                             @csrf @method('DELETE')
