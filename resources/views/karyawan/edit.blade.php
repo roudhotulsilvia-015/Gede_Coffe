@@ -1,6 +1,8 @@
 @extends('adminlte::page')
 @section('content')
+// Form untuk mengedit data karyawan yang sudah ada di dalam sistem.
 <div class="card">
+    // Bagian header kartu yang menampilkan judul "Edit Karyawan".
     <div class="card-body">
         <form action="{{ route('karyawan.update', $karyawan->id) }}" method="POST" class="needs-validation" novalidate>
             @csrf @method('PUT')
@@ -11,6 +13,7 @@
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
+            // Input untuk jabatan karyawan, wajib diisi dan divalidasi.
             <div class="form-group">
                 <label>Jabatan</label>
                 <input type="text" name="jabatan" class="form-control @error('jabatan') is-invalid @enderror" value="{{ old('jabatan', $karyawan->jabatan) }}" required>
@@ -18,6 +21,7 @@
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
+            // Input untuk nomor telepon karyawan, wajib diisi dan divalidasi.
             <div class="form-group">
                 <label>Telepon</label>
                 <input type="tel" name="telepon" class="form-control @error('telepon') is-invalid @enderror" value="{{ old('telepon', $karyawan->telepon) }}" required>
@@ -25,6 +29,7 @@
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
+            // Tombol untuk menyimpan perubahan data karyawan ke dalam sistem.
             <button type="submit" class="btn btn-primary">Update Data</button>
         </form>
     </div>
@@ -33,6 +38,7 @@
 
 @section('js')
 <script>
+    // Script untuk validasi form sebelum dikirimkan ke server, memastikan semua input wajib diisi.
     document.addEventListener('DOMContentLoaded', function() {
         var forms = document.querySelectorAll('.needs-validation');
         Array.prototype.slice.call(forms).forEach(function(form) {

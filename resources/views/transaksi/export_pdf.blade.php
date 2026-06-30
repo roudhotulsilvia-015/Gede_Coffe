@@ -16,6 +16,7 @@
     <h2 class="heading">Laporan Transaksi</h2>
     <table>
         <thead>
+            // Menampilkan header tabel transaksi
             <tr>
                 <th>Kode Transaksi</th>
                 <th>Kasir</th>
@@ -27,6 +28,7 @@
         </thead>
         <tbody>
             @foreach($transaksis as $t)
+            // Menampilkan setiap transaksi dalam tabel
             <tr>
                 <td>{{ $t->kode_transaksi }}</td>
                 <td>{{ optional($t->user)->name ?? '-' }}</td>

@@ -3,18 +3,20 @@
 @section('css')
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
 @stop
-
+// Bagian utama dari halaman yang menampilkan daftar produk yang ada di dalam sistem.
 @section('content')
 <div class="card">
     <div class="card-header">
         <h3 class="card-title">Daftar Menu Produk</h3>
         <div class="card-tools"><a href="{{ route('produk.create') }}" class="btn btn-primary btn-sm">Tambah</a></div>
     </div>
+    // Bagian isi kartu yang menampilkan tabel daftar produk.
     <div class="card-body">
         @if(session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif
         <table class="table table-bordered table-striped" id="tabelProduk">
+            // Bagian header tabel yang menampilkan judul kolom.
             <thead>
                 <tr>
                     <th>Nama</th>
@@ -26,12 +28,14 @@
             </thead>
             <tbody>
                 @foreach($produks as $p)
+                // Bagian isi tabel yang menampilkan data produk dari database, termasuk nama, kategori, harga, stok, dan aksi untuk setiap produk.
                 <tr>
                     <td>{{ $p->nama_produk }}</td>
                     <td>{{ $p->kategori }}</td>
                     <td>Rp {{ number_format($p->harga) }}</td>
                     <td>{{ $p->stok }}</td>
                     <td>
+                        // Tombol aksi untuk melihat detail, mengedit, dan menghapus produk.
                         <a href="{{ route('produk.show', $p->id) }}" class="btn btn-info btn-sm">Detail</a>
                         <a href="{{ route('produk.edit', $p->id) }}" class="btn btn-warning btn-sm">Edit</a>
                         <form action="{{ route('produk.destroy', $p->id) }}" method="POST" style="display:inline;">
@@ -51,6 +55,7 @@
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
 <script>
+    // Script untuk mengaktifkan fitur DataTables pada tabel daftar produk, termasuk pengaturan responsif, jumlah entri per halaman, dan teks bahasa Indonesia.
     $(document).ready(function() {
         $('#tabelProduk').DataTable({
             responsive: true,

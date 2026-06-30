@@ -3,10 +3,13 @@
 @section('title', 'Detail Karyawan')
 
 @section('content')
+// Form untuk menampilkan detail data karyawan yang ada di dalam sistem.
 <div class="card">
+    // Bagian header kartu yang menampilkan judul "Detail Karyawan".
     <div class="card-header">
         <h3 class="card-title">Detail Karyawan</h3>
     </div>
+    // Bagian isi kartu yang menampilkan tabel detail karyawan.
     <div class="card-body">
         <table class="table table-bordered">
             <tr><th>Nama</th><td>{{ $karyawan->nama }}</td></tr>

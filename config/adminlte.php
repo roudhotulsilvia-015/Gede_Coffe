@@ -37,7 +37,7 @@ return [
             'icon' => 'fas fa-fw fa-user-cog',
             'can'  => 'admin',
         ],
-        // 'Sesi Aktif' menu removed per request
+        
         [
             'text' => 'Menu Produk',
             'url'  => 'produk',
