@@ -50,8 +50,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('karyawan', KaryawanController::class);
         Route::resource('produk', ProdukController::class);
         Route::resource('users', App\Http\Controllers\UserController::class);
-        Route::get('/sessions', [SessionController::class, 'index'])->name('sessions.index');
-        Route::delete('/sessions/{id}', [SessionController::class, 'destroy'])->name('sessions.destroy');
+        // Sesi aktif: dihapus — fitur manajemen sesi dihapus
     });
 
     // Kasir dan Admin: akses kasir dan riwayat transaksi
