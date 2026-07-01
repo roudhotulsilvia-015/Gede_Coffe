@@ -1,8 +1,7 @@
 @extends('adminlte::page')
 
 @section('content')
-<div class="card">
-    // Bagian header kartu yang menampilkan judul "Edit Produk".
+<div class="card"> 
     <div class="card-body">
         <form action="{{ route('produk.update', $produk->id) }}" method="POST" class="needs-validation" novalidate>
             @csrf @method('PUT')
@@ -12,8 +11,7 @@
                 @error('nama_produk')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
-            </div>
-            // Input untuk kategori produk, wajib diisi dan divalidasi.
+            </div> 
             <div class="form-group">
                 <label>Kategori</label>
                 <select name="kategori" class="form-control @error('kategori') is-invalid @enderror" required>
@@ -27,24 +25,21 @@
                 @error('kategori')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
-            </div>
-            // Input untuk harga produk, wajib diisi dan divalidasi.
+            </div> 
             <div class="form-group">
                 <label>Harga</label>
                 <input type="number" name="harga" class="form-control @error('harga') is-invalid @enderror" value="{{ old('harga', $produk->harga) }}" required>
                 @error('harga')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
-            </div>
-            // Input untuk stok produk, wajib diisi dan divalidasi.
+            </div> 
             <div class="form-group">
                 <label>Stok</label>
                 <input type="number" name="stok" class="form-control @error('stok') is-invalid @enderror" value="{{ old('stok', $produk->stok) }}" required>
                 @error('stok')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
-            </div>
-            // Tombol untuk menyimpan perubahan data produk ke dalam sistem.
+            </div> 
             <button type="submit" class="btn btn-primary">Update</button>
         </form>
     </div>

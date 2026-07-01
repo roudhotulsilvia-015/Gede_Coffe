@@ -1,8 +1,6 @@
 @extends('adminlte::page')
-@section('content')
-// Form untuk mengedit data karyawan yang sudah ada di dalam sistem.
-<div class="card">
-    // Bagian header kartu yang menampilkan judul "Edit Karyawan".
+@section('content') 
+<div class="card"> 
     <div class="card-body">
         <form action="{{ route('karyawan.update', $karyawan->id) }}" method="POST" class="needs-validation" novalidate>
             @csrf @method('PUT')
@@ -12,24 +10,21 @@
                 @error('nama')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
-            </div>
-            // Input untuk jabatan karyawan, wajib diisi dan divalidasi.
+            </div> 
             <div class="form-group">
                 <label>Jabatan</label>
                 <input type="text" name="jabatan" class="form-control @error('jabatan') is-invalid @enderror" value="{{ old('jabatan', $karyawan->jabatan) }}" required>
                 @error('jabatan')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
-            </div>
-            // Input untuk nomor telepon karyawan, wajib diisi dan divalidasi.
+            </div> 
             <div class="form-group">
                 <label>Telepon</label>
                 <input type="tel" name="telepon" class="form-control @error('telepon') is-invalid @enderror" value="{{ old('telepon', $karyawan->telepon) }}" required>
                 @error('telepon')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
-            </div>
-            // Tombol untuk menyimpan perubahan data karyawan ke dalam sistem.
+            </div> 
             <button type="submit" class="btn btn-primary">Update Data</button>
         </form>
     </div>

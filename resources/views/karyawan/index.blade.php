@@ -1,25 +1,19 @@
 @extends('adminlte::page')
 
-@section('content')
-// Form untuk menampilkan daftar karyawan yang ada di dalam sistem.
-<div class="card">
-    // Bagian header kartu yang menampilkan judul "Daftar Karyawan
+@section('content') 
+<div class="card"> 
     <div class="card-header">
         <h3 class="card-title">Daftar Karyawan</h3>
         <div class="card-tools">
             <a href="{{ route('karyawan.create') }}" class="btn btn-primary btn-sm">Tambah Karyawan</a>
         </div>
-    </div>
-    // Bagian isi kartu yang menampilkan tabel daftar karyawan.
+    </div> 
     <div class="card-body">
         @if(session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
-            // Menampilkan pesan sukses jika ada.
+            <div class="alert alert-success">{{ session('success') }}</div> 
         @endif
-        <table class="table table-bordered table-striped" id="tabelKaryawan">
-            // Bagian header tabel yang menampilkan judul kolom.
-            <thead>
-                // Menampilkan kolom ID, Nama, Jabatan, Telepon, dan Aksi untuk setiap karyawan.
+        <table class="table table-bordered table-striped" id="tabelKaryawan"> 
+            <thead> 
                 <tr>
                     <th>ID</th>
                     <th>Nama</th>
@@ -27,8 +21,7 @@
                     <th>Telepon</th>
                     <th>Aksi</th>
                 </tr>
-            </thead>
-            // Bagian isi tabel yang menampilkan data karyawan dari database.
+            </thead> 
             <tbody>
                 @foreach($karyawans as $k)
                 <tr>
@@ -50,12 +43,10 @@
         </table>
     </div>
 </div>
-@stop
-// Bagian CSS untuk mengatur tampilan tabel menggunakan DataTables.
+@stop 
 @section('css')
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
-@stop
-// Bagian JavaScript untuk mengaktifkan fitur DataTables pada tabel daftar karyawan.
+@stop 
 @section('js')
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>

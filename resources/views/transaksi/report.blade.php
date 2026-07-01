@@ -3,19 +3,16 @@
 @section('title', 'Laporan Bulanan')
 
 @section('content')
-<div class="card">
-    // Menampilkan header laporan bulanan dengan pilihan tahun
+<div class="card"> 
     <div class="card-header d-flex justify-content-between align-items-center">
         <h3 class="card-title">Laporan Bulanan</h3>
         <form method="GET" action="{{ route('transaksi.report') }}" class="form-inline">
             <div class="input-group">
-                <select name="year" class="form-control">
-                    // Menampilkan pilihan tahun dari 2 tahun yang lalu hingga 1 tahun ke depan
+                <select name="year" class="form-control"> 
                     @for($y = now()->year - 2; $y <= now()->year + 1; $y++)
                         <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>{{ $y }}</option>
                     @endfor
-                </select>
-                // Tombol untuk menampilkan laporan berdasarkan tahun yang dipilih
+                </select> 
                 <button class="btn btn-primary">Tampilkan</button>
             </div>
         </form>
@@ -23,8 +20,7 @@
     <div class="card-body">
         <div class="row">
             <div class="col-md-8">
-                <div class="card mb-4">
-                    // Menampilkan grafik pendapatan per bulan
+                <div class="card mb-4"> 
                     <div class="card-header">Grafik Pendapatan per Bulan</div>
                     <div class="card-body">
                         <canvas id="monthlyChart"></canvas>
@@ -32,11 +28,9 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card mb-4">
-                    // Menampilkan ringkasan total transaksi dan pendapatan
+                <div class="card mb-4"> 
                     <div class="card-header">Ringkasan Tahun {{ $year }}</div>
-                    <div class="card-body">
-                    // Menampilkan total transaksi dan total pendapatan
+                    <div class="card-body"> 
                         <p><strong>Total Transaksi:</strong> {{ $totalTransactions }}</p>
                         <p><strong>Total Pendapatan:</strong> Rp {{ number_format($totalRevenue) }}</p>
                     </div>
@@ -46,11 +40,9 @@
 
         <div class="card">
             <div class="card-header">Detail Laporan Bulanan</div>
-            <div class="card-body">
-                // Menampilkan tabel laporan bulanan dengan jumlah transaksi dan total pendapatan per bulan 
+            <div class="card-body"> 
                 <table class="table table-striped table-bordered" id="tableReport">
-                    <thead>
-                        // Menampilkan header tabel laporan bulanan
+                    <thead> 
                         <tr>
                             <th>Bulan</th>
                             <th>Jumlah Transaksi</th>
@@ -58,8 +50,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($tableData as $row)
-                        // Menampilkan data bulan, jumlah transaksi, dan total pendapatan
+                        @foreach($tableData as $row) 
                             <tr>
                                 <td>{{ $row['month'] }}</td>
                                 <td>{{ $row['count'] }}</td>

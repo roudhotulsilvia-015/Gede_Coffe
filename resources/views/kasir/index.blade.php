@@ -1,16 +1,12 @@
 @extends('layout.app')
 
-@section('main_content')
-// Bagian utama dari halaman kasir yang menampilkan daftar produk dan keranjang belanja.
-<div class="row">
-    // Bagian kiri halaman yang menampilkan daftar produk yang tersedia untuk dibeli.
+@section('main_content') 
+<div class="row">   
     <div class="col-md-7">
         @foreach($produks as $kategori => $items)
-            <h5 class="text-secondary mt-3">{{ $kategori }}</h5>
-            // Menampilkan setiap produk dalam kategori sebagai kartu dengan informasi nama, harga, stok, dan tombol untuk menambah ke keranjang.
+            <h5 class="text-secondary mt-3">{{ $kategori }}</h5> 
             <div class="row">
-                @foreach($items as $p)
-                // Kartu produk yang menampilkan nama produk, harga, stok, input jumlah, dan tombol untuk menambah ke keranjang.
+                @foreach($items as $p) 
                 <div class="col-md-4" id="product_{{ $p->id }}">
                     <div class="card shadow-sm">
                         <div class="card-body text-center" data-stock="{{ $p->stok }}">
@@ -27,8 +23,7 @@
                 @endforeach
             </div>
         @endforeach
-    </div>
-// Bagian kanan halaman yang menampilkan keranjang belanja dengan daftar item, total harga, input jumlah bayar, dan tombol untuk memproses transaksi.
+    </div> 
     <div class="col-md-5">
         <div class="card shadow">
             <div class="card-header bg-dark text-white">Keranjang Belanja</div>
@@ -36,19 +31,16 @@
                 <table class="table table-sm" id="cartTable">
                     <thead><tr><th>Item</th><th>Qty</th><th>Subtotal</th></tr></thead>
                     <tbody></tbody>
-                </table>
-                // Input untuk jumlah bayar dan kembalian, serta tombol untuk memproses transaksi dan mencetak struk.
+                </table> 
                 <hr>
                 <div class="form-group mb-2">
                     <label for="bayar">Bayar</label>
                     <input type="number" id="bayar" class="form-control" min="0" placeholder="Masukkan jumlah bayar" oninput="updateKembalian()">
-                </div>
-                // Input untuk menampilkan kembalian yang dihitung berdasarkan total harga dan jumlah bayar.
+                </div> 
                 <div class="form-group mb-3">
                     <label for="kembalian">Kembalian</label>
                     <input type="text" id="kembalian" class="form-control" readonly value="Rp 0">
-                </div>
-                // Menampilkan total harga dari semua item di keranjang belanja.
+                </div> 
                 <h4>Total: Rp <span id="totalHarga">0</span></h4>
                 <button class="btn btn-primary btn-lg btn-block" onclick="checkout()">Proses & Cetak Struk</button>
             </div>

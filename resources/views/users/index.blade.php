@@ -7,30 +7,22 @@
 @stop
 
 @section('content')
-<div class="card">
-    // Menampilkan header untuk daftar user
-    <div class="card-header">
-        // Menampilkan judul daftar user
-        <h3 class="card-title">Daftar User</h3>
-        // Tombol untuk menambahkan user baru
+<div class="card"> 
+    <div class="card-header"> 
+        <h3 class="card-title">Daftar User</h3> 
         <div class="card-tools">
             <a href="{{ route('users.create') }}" class="btn btn-primary btn-sm">Tambah User</a>
         </div>
-    </div>
-    // Menampilkan tabel daftar user
-    <div class="card-body">
-        // Menampilkan pesan sukses jika ada
+    </div> 
+    <div class="card-body"> 
         @if(session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
-        @endif
-        // Menampilkan pesan error jika ada
+        @endif 
         @if(session('error'))
             <div class="alert alert-danger">{{ session('error') }}</div>
-        @endif
-        // Menampilkan tabel daftar user
+        @endif 
         <table class="table table-bordered table-striped" id="tabelUsers">
-            <thead>
-                // Menampilkan header tabel daftar user
+            <thead> 
                 <tr>
                     <th>Nama</th>
                     <th>Username</th>
@@ -38,16 +30,13 @@
                     <th>Aksi</th>
                 </tr>
             </thead>
-            <tbody>
-                // Menampilkan setiap user dalam tabel
+            <tbody> 
                 @foreach($users as $user)
-                <tr>
-                    // Menampilkan nama, username, dan role user
+                <tr> 
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->username }}</td>
                     <td>{{ ucfirst($user->role) }}</td>
-                    <td>
-                        // Tombol untuk melihat detail, mengedit, dan menghapus user
+                    <td> 
                         <a href="{{ route('users.show', $user->id) }}" class="btn btn-info btn-sm">Detail</a>
                         <a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning btn-sm">Edit</a>
                         <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display:inline;">
