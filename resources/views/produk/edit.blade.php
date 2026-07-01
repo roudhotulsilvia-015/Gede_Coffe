@@ -41,6 +41,7 @@
                 @enderror
             </div> 
             <button type="submit" class="btn btn-primary">Update</button>
+             <a href="{{ route('produk.index') }}" class="btn btn-secondary">Kembali</a>
         </form>
     </div>
 </div>

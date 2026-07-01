@@ -37,6 +37,7 @@
                 @error('role') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div> 
             <button type="submit" class="btn btn-primary">Update User</button>
+             <a href="{{ route('users.index') }}" class="btn btn-secondary">Kembali</a>
         </form>
     </div>
 </div>

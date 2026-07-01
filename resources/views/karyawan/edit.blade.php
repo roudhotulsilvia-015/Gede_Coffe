@@ -26,6 +26,7 @@
                 @enderror
             </div> 
             <button type="submit" class="btn btn-primary">Update Data</button>
+             <a href="{{ route('karyawan.index') }}" class="btn btn-secondary">Kembali</a>
         </form>
     </div>
 </div>

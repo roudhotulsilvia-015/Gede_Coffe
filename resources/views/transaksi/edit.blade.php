@@ -32,6 +32,7 @@
 
             <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
             <a href="{{ route('transaksi.riwayat') }}" class="btn btn-secondary">Batal</a>
+             <a href="{{ route('transaksi.riwayat') }}" class="btn btn-secondary">Kembali</a> 
         </form>
     </div>
 </div>
